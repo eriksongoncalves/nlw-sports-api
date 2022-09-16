@@ -2,7 +2,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
 
-import { convertHourStringToMinutes } from './utils/convert-hour-string-to-minutes'
+import { convertHourToMinutes } from './utils/convert-hour-to-minutes'
+import { convertMinutesToHour } from './utils/convert-minutes-to-hour'
 
 dotenv.config()
 
@@ -50,7 +51,9 @@ app.get('/games/:id/ads', async (req, res) => {
     ads.map(ad => {
       return {
         ...ads,
-        weekDays: ad.weekDays.split(',')
+        weekDays: ad.weekDays.split(','),
+        hourStart: convertMinutesToHour(ad.hourStart),
+        hourEnd: convertMinutesToHour(ad.hourEnd)
       }
     })
   )
@@ -65,8 +68,8 @@ app.post('/games/:id/ads', async (req, res) => {
       ...bodyData,
       gameId,
       weekDays: bodyData.weekDays.join(','),
-      hourStart: convertHourStringToMinutes(bodyData.hourStart),
-      hourEnd: convertHourStringToMinutes(bodyData.hourEnd)
+      hourStart: convertHourToMinutes(bodyData.hourStart),
+      hourEnd: convertHourToMinutes(bodyData.hourEnd)
     }
   })
 
