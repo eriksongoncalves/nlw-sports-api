@@ -9,9 +9,22 @@ app.get('/games', (req, res) => {
 })
 
 app.get('/games/:id/ads', (req, res) => {
-  const { id } = req.params
+  // const gameId = req.params.id
 
-  return res.json([{ id }])
+  return res.json([
+    { id: 1, name: 'Anúncio 1' },
+    { id: 2, name: 'Anúncio 2' },
+    { id: 3, name: 'Anúncio 3' },
+    { id: 4, name: 'Anúncio 4' }
+  ])
+})
+
+app.post('/ads', (req, res) => {
+  return res.status(200).json([])
+})
+
+app.get('/ads/:id/discord', (req, res) => {
+  return res.json([])
 })
 
 const port = Number(process.env.PORT || 3333)
