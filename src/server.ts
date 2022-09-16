@@ -9,7 +9,7 @@ app.get('/games', (req, res) => {
 })
 
 app.get('/games/:id/ads', (req, res) => {
-  // const gameId = req.params.id
+  // const gameId = req.params.i
 
   return res.json([
     { id: 1, name: 'Anúncio 1' },
