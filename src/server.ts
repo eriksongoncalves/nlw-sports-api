@@ -56,8 +56,21 @@ app.post('/ads', (req, res) => {
   return res.status(200).json([])
 })
 
-app.get('/ads/:id/discord', (req, res) => {
-  return res.json([])
+app.get('/ads/:id/discord', async (req, res) => {
+  const adId = req.params.id
+
+  const ad = await prisma.ad.findUniqueOrThrow({
+    select: {
+      discord: true
+    },
+    where: {
+      id: adId
+    }
+  })
+
+  return res.json({
+    discord: ad.discord
+  })
 })
 
 const port = Number(process.env.PORT || 3333)
