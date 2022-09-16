@@ -2,10 +2,14 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
 
+import { convertHourStringToMinutes } from './utils/convert-hour-string-to-minutes'
+
 dotenv.config()
 
 const app = express()
 const prisma = new PrismaClient()
+
+app.use(express.json())
 
 app.get('/games', async (req, res) => {
   const games = await prisma.game.findMany({
@@ -52,8 +56,21 @@ app.get('/games/:id/ads', async (req, res) => {
   )
 })
 
-app.post('/ads', (req, res) => {
-  return res.status(200).json([])
+app.post('/games/:id/ads', async (req, res) => {
+  const gameId = req.params.id
+  const bodyData = req.body
+
+  const ad = await prisma.ad.create({
+    data: {
+      ...bodyData,
+      gameId,
+      weekDays: bodyData.weekDays.join(','),
+      hourStart: convertHourStringToMinutes(bodyData.hourStart),
+      hourEnd: convertHourStringToMinutes(bodyData.hourEnd)
+    }
+  })
+
+  return res.status(200).json(ad)
 })
 
 app.get('/ads/:id/discord', async (req, res) => {
