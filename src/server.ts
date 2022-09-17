@@ -49,16 +49,14 @@ app.get('/games/:id/ads', async (req, res) => {
     }
   })
 
-  return res.json(
-    ads.map(ad => {
-      return {
-        ...ads,
-        weekDays: ad.weekDays.split(','),
-        hourStart: convertMinutesToHour(ad.hourStart),
-        hourEnd: convertMinutesToHour(ad.hourEnd)
-      }
-    })
-  )
+  const dataFormatted = ads.map(ad => ({
+    ...ad,
+    weekDays: ad.weekDays.split(','),
+    hourStart: convertMinutesToHour(ad.hourStart),
+    hourEnd: convertMinutesToHour(ad.hourEnd)
+  }))
+
+  res.json(dataFormatted)
 })
 
 app.post('/games/:id/ads', async (req, res) => {
